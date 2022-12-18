@@ -12,6 +12,9 @@ class Location(models.Model):
     name = models.CharField(max_length=50)
     nr_seats = models.IntegerField()
 
+class PupilsClass(models.Model):
+    name = models.CharField(max_length=50)
+
 
 class Lesson(models.Model):
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
