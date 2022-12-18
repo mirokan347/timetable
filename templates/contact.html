@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Contact</h1>
+{{ request.user.is_authenticated }}
+<p>
+<h2>{{ my_text }}</h2>
+<h2>{{ adress }}</h2>
+<h2>{{ number }}</h2>
+</p>
+{% endblock %}
