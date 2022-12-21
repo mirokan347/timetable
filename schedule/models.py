@@ -12,8 +12,9 @@ class Location(models.Model):
     name = models.CharField(max_length=50)
     nr_seats = models.IntegerField()
 
-class PupilsClass(models.Model):
-    name = models.CharField(max_length=50)
+
+'''class PupilsClass(models.Model):
+    name = models.CharField(max_length=50)'''
 
 
 class Lesson(models.Model):
@@ -25,7 +26,7 @@ class Lesson(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    # Spupils_class = models.ForeignKey(PupilsClass, on_delete=models.CASCADE)
 
     def get_absolute_url(self):
         return reverse("lesson:lesson-detail", kwargs={"id": self.id})
