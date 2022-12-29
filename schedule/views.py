@@ -1,3 +1,75 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from django.urls import reverse
+from django.views.generic import (
+    CreateView,
+    DetailView,
+    UpdateView,
+    ListView,
+    DeleteView
+)
 
-# Create your views here.
+from .forms import LessonModelForm
+from .models import Lesson
+
+
+class LessonCreateView(CreateView):
+    template_name = 'lesson/lesson_create.html'
+    form_class = LessonModelForm
+    queryset = Lesson.objects.all()  # <blog>/<modelname>_list.html
+
+    # success_url = '/'
+
+    def form_valid(self, form):
+        print(form.cleaned_data)
+        return super().form_valid(form)
+
+    # def get_success_url(self):
+    #    return '/'
+
+
+class LessonListView(ListView):
+    template_name = 'lesson/lesson_list.html'
+    queryset = Lesson.objects.all()  # <blog>/<modelname>_list.html
+
+
+class LessonDetailView(DetailView):
+    template_name = 'lesson/lesson_detail.html'
+
+    # queryset = Article.objects.all()
+
+    def get_object(self):
+        id_ = self.kwargs.get("id")
+        return get_object_or_404(Lesson, id=id_)
+
+
+class LessonUpdateView(UpdateView):
+    template_name = 'lesson/lesson_create.html'
+    form_class = LessonModelForm
+
+    def get_object(self):
+        id_ = self.kwargs.get("id")
+        return get_object_or_404(Lesson, id=id_)
+
+    def form_valid(self, form):
+        print(form.cleaned_data)
+        return super().form_valid(form)
+
+
+class LessonDeleteView(DeleteView):
+    template_name = 'lesson/lesson_delete.html'
+
+    def get_object(self):
+        id_ = self.kwargs.get("id")
+        return get_object_or_404(Lesson, id=id_)
+
+    def get_success_url(self):
+        return reverse('schedule:lesson-list')
+
+
+
+
+
+
+
+
+
