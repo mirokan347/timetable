@@ -38,6 +38,9 @@ class ClassGroupMembership(models.Model):
     date_joined = models.DateField()
     invite_reason = models.CharField(max_length=64)
 
+    def __str__(self):
+        return f'{self.pupil} - {self.group}'
+
 
 class Lesson(models.Model):
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
@@ -52,3 +55,7 @@ class Lesson(models.Model):
 
     def get_absolute_url(self):
         return reverse("schedule:lesson-detail", kwargs={"id": self.id})
+
+    def __str__(self):
+        return f'{self.subject} - {self.class_group} - {self.location}'
+

@@ -41,6 +41,10 @@ class LessonDetailView(DetailView):
         id_ = self.kwargs.get("id")
         return get_object_or_404(Lesson, id=id_)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # context['now'] = timezone.now()
+        return context
 
 class LessonUpdateView(UpdateView):
     template_name = 'lesson/lesson_create.html'
