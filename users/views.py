@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import login, authenticate, logout
+from django.conf import settings
 
 from .forms import RegistrationForm, AccountAuthenticationForm
-
+from .models import CustomUser
 
 def register_view(request, *args, **kwargs):
     user = request.user
@@ -74,3 +75,35 @@ def get_redirect_if_exists(request):
         if request.GET.get("next"):
             redirect = str(request.GET.get("next"))
     return redirect
+
+
+def account_view(request, *args, **kwargs):
+    """
+    - Logic here is kind of tricky
+        is_self (boolean)
+    """
+    context = {}
+    user_id = kwargs.get("user_id")
+    try:
+        account = CustomUser.objects.get(pk=user_id)
+    except:
+        return HttpResponse("Something went wrong.")
+    if account:
+        context['id'] = account.id
+        context['email'] = account.email
+        context['first_name'] = account.first_name
+        context['last_name'] = account.last_name
+
+        # Define template variables
+        is_self = True
+        user = request.user
+        if user.is_authenticated and user != account:
+            is_self = False
+        elif not user.is_authenticated:
+            is_self = False
+
+        # Set the template variables to the values
+        context['is_self'] = is_self
+        context['BASE_URL'] = settings.BASE_URL
+        return render(request, "users/account.html", context)
+

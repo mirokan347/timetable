@@ -131,3 +131,10 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.CustomUser'
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.AllowAllUsersModelBackend',
+    #'users.backends.CaseInsensitiveModelBackend',
+    )
+
+BASE_URL = "http://127.0.0.1:8000"
+
