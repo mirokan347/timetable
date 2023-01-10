@@ -3,8 +3,9 @@ from django.http import HttpResponse
 from django.contrib.auth import login, authenticate, logout
 from django.conf import settings
 
-from .forms import RegistrationForm, AccountAuthenticationForm
+from .forms import RegistrationForm, AccountAuthenticationForm, AccountUpdateForm
 from .models import CustomUser
+
 
 def register_view(request, *args, **kwargs):
     user = request.user
@@ -107,3 +108,38 @@ def account_view(request, *args, **kwargs):
         context['BASE_URL'] = settings.BASE_URL
         return render(request, "users/account.html", context)
 
+
+def edit_account_view(request, *args, **kwargs):
+    if not request.user.is_authenticated:
+        return redirect("login")
+    user_id = kwargs.get("user_id")
+    account = CustomUser.objects.get(pk=user_id)
+    if account.pk != request.user.pk:
+        return HttpResponse("You cannot edit someone elses profile.")
+    context = {}
+    if request.POST:
+        form = AccountUpdateForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect("users:view", user_id=account.pk)
+        else:
+            form = AccountUpdateForm(request.POST, instance=request.user,
+                                     initial={
+                                         "id": account.pk,
+                                         "email": account.email,
+                                         "first_name": account.first_name,
+                                         "last_name": account.last_name,
+                                     }
+                                     )
+            context['form'] = form
+    else:
+        form = AccountUpdateForm(
+            initial={
+                "id": account.pk,
+                "email": account.email,
+                "first_name": account.first_name,
+                "last_name": account.last_name,
+            }
+        )
+        context['form'] = form
+    return render(request, "users/edit_account.html", context)
