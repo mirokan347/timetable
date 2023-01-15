@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'datetimewidget',
+    'crispy_forms',
     # third party
 
     # own
@@ -140,3 +141,4 @@ AUTHENTICATION_BACKENDS = (
 
 BASE_URL = "http://127.0.0.1:8000"
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

@@ -1,0 +1,31 @@
+{% load static %}
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <!-- Container wrapper -->
+  <div class="container">
+
+      <!-- Left links -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'home' %}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'contact' %}">Contact</a>
+        </li>
+      </ul>
+    {% if request.user.is_authenticated %}
+      <div class="d-flex align-items-center">
+        <a class="btn btn-primary m-2" href="{% url 'users:view' user_id=request.user.id %}">Account</a>
+        <a class="btn btn-outline-primary m-2" href="{% url 'users:logout' %}">Logout</a>
+      </div>
+    {% else %}
+      <div class="d-flex align-items-center">
+        <a class="btn btn-primary m-2" href="{% url 'users:login' %}">Login</a>
+        <a class="btn btn-outline-primary m-2" href="{% url 'users:register' %}">Register</a>
+      </div>
+      {% endif %}
+    </div>
+  <!-- Container wrapper -->
+</nav>
+<!-- Navbar -->

@@ -20,9 +20,10 @@ from pages.views import homepage_view, contact_view
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('', homepage_view, name='home'),
-    path('contact/', contact_view, name='contact'),
+path('contact/', contact_view, name='contact'),
+    path('admin/', admin.site.urls),
+    path('pages/', include('pages.urls')),
     path('schedule/', include('schedule.urls')),
     path('users/', include('users.urls')),
     path('password_change/done/',
@@ -37,7 +38,8 @@ urlpatterns = [
          name='password_reset_done'),
 
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
-    path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
+    path('password_reset/', auth_views.PasswordResetView.as_view(template_name='password_reset/password_reset_form.html'),
+         name='password_reset'),
 
     path('reset/done/',
          auth_views.PasswordResetCompleteView.as_view(template_name='password_reset/password_reset_complete.html'),

@@ -22,7 +22,7 @@ class RegistrationForm(UserCreationForm):
 
     class Meta:
         model = CustomUser
-        fields = ('email', 'password1', 'password2',)
+        fields = ['email', 'password1', 'password2']
 
     def clean_email(self):
         email = self.cleaned_data['email'].lower()
