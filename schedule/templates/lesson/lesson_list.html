@@ -3,10 +3,23 @@
 {% block content %}
 
 
-
+<!--
 {% for instance in object_list %}
      <p>{{ instance.id }} - <a href='{{ instance.get_absolute_url }}'>{{ instance.subject }}</a></p>
 {% endfor %}
 
 
-{% endblock %}
+{% endblock %}-->
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+        <input type="text" class="form-control datepicker">
+    </div>
+  </div>
+</div>
+$('.datepicker').datepicker({
+    format: 'mm/dd/yyyy',
+    startView: 2,
+    minViewMode: 1
+});

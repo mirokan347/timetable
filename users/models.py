@@ -13,6 +13,8 @@ from .managers import CustomUserManager
 class CustomUser(AbstractUser):
     username = None
     email = models.EmailField(_('email address'), unique=True)
+    phone = models.BigIntegerField('phone number', blank=True, null=True)
+    address = models.CharField('address', max_length=255, blank=True, null=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
