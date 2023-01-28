@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+	<h1 class="mt-2">Edit Account</h1>
+	<hr class="mt-0 mb-4">
+
+		<form class="form-signin" method="post">{% csrf_token %}
+			<p>{{form|crispy}}</p>
+			<button class="btn btn-success" type="submit">Save</button>
+		</form>
+
+
+{% endblock content %}

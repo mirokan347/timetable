@@ -23,6 +23,7 @@ class Location(models.Model):
     def __str__(self):
         return self.name
 
+
 class ClassGroup(models.Model):
     name = models.CharField(max_length=50)
     members = models.ManyToManyField(CustomUser, through='ClassGroupMembership')
@@ -47,11 +48,10 @@ class Lesson(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
-    '''pupil = models.ForeignKey(CustomUser, related_name='pupil', on_delete=models.CASCADE,
-                              default=None)'''
-    teacher = models.ForeignKey(CustomUser, related_name='teacher', on_delete=models.CASCADE,
-                                default=None)
-    class_group = models.ForeignKey(ClassGroup, on_delete=models.CASCADE, default=None)
+    pupil = models.ForeignKey(CustomUser, related_name='pupil', on_delete=models.CASCADE,
+                              blank=True, null=True, default=None)
+    teacher = models.ForeignKey(CustomUser, related_name='teacher', on_delete=models.CASCADE, default=None)
+    class_group = models.ForeignKey(ClassGroup, on_delete=models.CASCADE, blank=True, null=True, default=None)
 
     def get_absolute_url(self):
         return reverse("schedule:lesson-detail", kwargs={"id": self.id})

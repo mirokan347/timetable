@@ -15,27 +15,20 @@ from .models import Lesson
 class LessonCreateView(CreateView):
     template_name = 'lesson/lesson_create.html'
     form_class = LessonModelForm
-    queryset = Lesson.objects.all()  # <blog>/<modelname>_list.html
-
-    # success_url = '/'
+    queryset = Lesson.objects.all()
 
     def form_valid(self, form):
         print(form.cleaned_data)
         return super().form_valid(form)
 
-    # def get_success_url(self):
-    #    return '/'
-
 
 class LessonListView(ListView):
     template_name = 'lesson/lesson_list.html'
-    queryset = Lesson.objects.all()  # <blog>/<modelname>_list.html
+    queryset = Lesson.objects.all()
 
 
 class LessonDetailView(DetailView):
     template_name = 'lesson/lesson_detail.html'
-
-    # queryset = Article.objects.all()
 
     def get_object(self):
         id_ = self.kwargs.get("id")
@@ -43,7 +36,6 @@ class LessonDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # context['now'] = timezone.now()
         return context
 
 class LessonUpdateView(UpdateView):
