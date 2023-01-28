@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+pages/__pycache__
+schedule/__pycache__
+timetable/__pycache__
+schedule/migrations/__pycache__
