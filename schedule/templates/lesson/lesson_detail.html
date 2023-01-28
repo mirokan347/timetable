@@ -2,8 +2,13 @@
 
 {% block content %}
 <h1>{{ object.subject }}</h1>
-<p>{{ object.location }}</p>
-<p>{{ object.start_time }}</p>
-<p>{{ object.end_time }}</p>
-<p>{{ object.class_group }}</p>
+<p>Miejsce: {{ object.location }}</p>
+<p>start: {{ object.start_time }}</p>
+<p>Koniec: {{ object.end_time }}</p>
+{% if object.class_group %}
+    <p>Grupa: {{ object.class_group }}</p>
+{% endif %}
+{% if object.pupil %}
+    <p>Uczeń: {{ object.pupil }}</p>
+{% endif %}
 {% endblock %}
