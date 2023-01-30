@@ -94,6 +94,8 @@ def account_view(request, *args, **kwargs):
         context['email'] = account.email
         context['first_name'] = account.first_name
         context['last_name'] = account.last_name
+        context['phone'] = account.phone
+        context['address'] = account.address
 
         # Define template variables
         is_self = True
@@ -118,7 +120,7 @@ def edit_account_view(request, *args, **kwargs):
         return HttpResponse("You cannot edit someone elses profile.")
     context = {}
     if request.POST:
-        form = AccountUpdateForm(request.POST, request.FILES, instance=request.user)
+        form = AccountUpdateForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
             return redirect("users:view", user_id=account.pk)
@@ -129,6 +131,8 @@ def edit_account_view(request, *args, **kwargs):
                                          "email": account.email,
                                          "first_name": account.first_name,
                                          "last_name": account.last_name,
+                                         "phone": account.phone,
+                                         "address": account.address
                                      }
                                      )
             context['form'] = form
@@ -139,6 +143,8 @@ def edit_account_view(request, *args, **kwargs):
                 "email": account.email,
                 "first_name": account.first_name,
                 "last_name": account.last_name,
+                "phone": account.phone,
+                "address": account.address
             }
         )
         context['form'] = form

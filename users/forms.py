@@ -8,13 +8,13 @@ from .models import CustomUser
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = CustomUser
-        fields = ('email', 'first_name', 'last_name')
+        fields = ('email', 'first_name', 'last_name', 'phone', 'address')
 
 
 class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = CustomUser
-        fields = ('email', 'first_name', 'last_name')
+        fields = ('email', 'first_name', 'last_name', 'phone', 'address')
 
 
 class RegistrationForm(UserCreationForm):
@@ -52,7 +52,7 @@ class AccountUpdateForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ('email', 'first_name', 'last_name')
+        fields = ('email', 'first_name', 'last_name', 'phone', 'address')
 
     def clean_email(self):
         email = self.cleaned_data['email'].lower()
@@ -70,4 +70,3 @@ class AccountUpdateForm(forms.ModelForm):
         if commit:
             account.save()
         return account
-
