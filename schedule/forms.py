@@ -11,7 +11,7 @@ class LessonModelForm(forms.ModelForm):
             'location',
             'start_time',
             'end_time',
-            'pupil',
+            'student',
             'class_group',
             'teacher',
         ]

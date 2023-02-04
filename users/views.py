@@ -4,7 +4,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.conf import settings
 
 from .forms import RegistrationForm, AccountAuthenticationForm, AccountUpdateForm
-from .models import CustomUser
+from .models import User
 
 
 def register_view(request, *args, **kwargs):
@@ -86,7 +86,7 @@ def account_view(request, *args, **kwargs):
     context = {}
     user_id = kwargs.get("user_id")
     try:
-        account = CustomUser.objects.get(pk=user_id)
+        account = User.objects.get(pk=user_id)
     except:
         return HttpResponse("Something went wrong.")
     if account:
@@ -115,7 +115,7 @@ def edit_account_view(request, *args, **kwargs):
     if not request.user.is_authenticated:
         return redirect("login")
     user_id = kwargs.get("user_id")
-    account = CustomUser.objects.get(pk=user_id)
+    account = User.objects.get(pk=user_id)
     if account.pk != request.user.pk:
         return HttpResponse("You cannot edit someone elses profile.")
     context = {}

@@ -6,7 +6,7 @@ import sys
 import os.path
 # Import from sibling directory ..\
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
-from users.models import CustomUser
+from users.models import User, Teacher, Student
 
 
 class Subject(models.Model):
@@ -26,21 +26,21 @@ class Location(models.Model):
 
 class ClassGroup(models.Model):
     name = models.CharField(max_length=50)
-    members = models.ManyToManyField(CustomUser, through='ClassGroupMembership')
+    members = models.ManyToManyField(User, through='ClassGroupMembership')
     year = models.CharField(max_length=50, default=None)
 
     def __str__(self):
-        return self.name
+        return f'{self.name} - {self.year}'
 
 
 class ClassGroupMembership(models.Model):
-    pupil = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
     group = models.ForeignKey(ClassGroup, on_delete=models.CASCADE)
     date_joined = models.DateField()
     invite_reason = models.CharField(max_length=64)
 
     def __str__(self):
-        return f'{self.pupil} - {self.group}'
+        return f'{self.student} - {self.group}'
 
 
 class Lesson(models.Model):
@@ -48,9 +48,8 @@ class Lesson(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
-    pupil = models.ForeignKey(CustomUser, related_name='pupil', on_delete=models.CASCADE,
-                              blank=True, null=True, default=None)
-    teacher = models.ForeignKey(CustomUser, related_name='teacher', on_delete=models.CASCADE, default=None)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, blank=True, null=True, default=None)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, default=None)
     class_group = models.ForeignKey(ClassGroup, on_delete=models.CASCADE, blank=True, null=True, default=None)
 
     def get_absolute_url(self):
