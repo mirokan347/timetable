@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Logbook Detail</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Attendance</th>
+                <th>Grade</th>
+                <th>Comment</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ logbook.student }}</td>
+                <td>{{ logbook.attendance }}</td>
+                <td>{{ logbook.grade }}</td>
+                <td>{{ logbook.comment }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="{% url 'logbook:logbook-update' logbook.id %}">Edit</a>
+    <a href="{% url 'logbook:logbook-delete' logbook.id %}">Delete</a>
+{% endblock %}

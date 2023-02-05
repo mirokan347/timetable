@@ -1,7 +1,6 @@
 from django.contrib.auth.models import AbstractUser, Group
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
 from .managers import CustomUserManager
 
 
@@ -31,6 +30,11 @@ class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     enrollment_date = models.DateField()
 
+    def save(self, *args, **kwargs):
+        student_group, created = Group.objects.get_or_create(name='Student')
+        self.user.groups.add(student_group)
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f'{self.user}'
 
@@ -39,30 +43,25 @@ class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     start_date = models.DateField()
 
+    def save(self, *args, **kwargs):
+        teacher_group, created = Group.objects.get_or_create(name='Teacher')
+        self.user.groups.add(teacher_group)
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f'{self.user}'
 
 
 class Parent(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    child = models.ForeignKey(Student, on_delete=models.CASCADE, blank=True, null=True, default=None)
+    students = models.ManyToManyField(Student, related_name='parents')
     relationship = models.CharField(max_length=20)
+
+    def save(self, *args, **kwargs):
+        parent_group, created = Group.objects.get_or_create(name='Parent')
+        self.user.groups.add(parent_group)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.user} - {self.relationship}'
 
-
-def assign_group(sender, instance, created, **kwargs):
-    if created:
-        if isinstance(instance, Student):
-            group = Group.objects.get(name="Student")
-        elif isinstance(instance, Teacher):
-            group = Group.objects.get(name="Teacher")
-        elif isinstance(instance, Parent):
-            group = Group.objects.get(name="Parent")
-        else:
-            return
-        instance.user.groups.add(group)
-
-
-models.signals.post_save.connect(assign_group, sender=User)

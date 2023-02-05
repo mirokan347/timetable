@@ -21,10 +21,12 @@ from pages.views import homepage_view, contact_view
 
 urlpatterns = [
     path('', homepage_view, name='home'),
+    path('no_permission/', homepage_view, name='home'),
     path('contact/', contact_view, name='contact'),
     path('admin/', admin.site.urls),
     path('schedule/', include('schedule.urls')),
     path('users/', include('users.urls')),
+    path('logbook/', include('logbook.urls')),
     path('password_change/done/',
          auth_views.PasswordChangeDoneView.as_view(template_name='password_reset/password_change_done.html'),
          name='password_change_done'),

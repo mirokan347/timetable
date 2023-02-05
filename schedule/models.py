@@ -26,7 +26,7 @@ class Location(models.Model):
 
 class ClassGroup(models.Model):
     name = models.CharField(max_length=50)
-    members = models.ManyToManyField(User, through='ClassGroupMembership')
+    members = models.ManyToManyField(Student, through='ClassGroupMembership')
     year = models.CharField(max_length=50, default=None)
 
     def __str__(self):
@@ -34,7 +34,7 @@ class ClassGroup(models.Model):
 
 
 class ClassGroupMembership(models.Model):
-    student = models.ForeignKey(User, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
     group = models.ForeignKey(ClassGroup, on_delete=models.CASCADE)
     date_joined = models.DateField()
     invite_reason = models.CharField(max_length=64)

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Logbook List</h1>
+    <h2>{{ logbooks.lesson }} - {{ logbooks.subject }}</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Attendance</th>
+                <th>Grade</th>
+                <th>Comment</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for logbook in logbooks %}
+                <tr>
+                    <td>{{ logbook.student }}</td>
+                    <td>{{ logbook.attendance }}</td>
+                    <td>{{ logbook.grade }}</td>
+                    <td>{{ logbook.comment }}</td>
+                    <td><a href="{% url 'logbook:logbook-detail' logbook.id %}">View</a></td>
+                    <td><a href="{% url 'logbook:logbook-update' logbook.id %}">Edit</a></td>
+                    <td><a href="{% url 'logbook:logbook-delete' logbook.id %}">Delete</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'logbook:logbook-create' %}">Create a new Logbook</a>
+{% endblock %}

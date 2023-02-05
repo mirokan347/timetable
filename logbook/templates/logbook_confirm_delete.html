@@ -1,0 +1,13 @@
+<!-- logbook_confirm_delete.html -->
+
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Confirm Deletion</h1>
+  <p>Are you sure you want to delete the logbook entry?</p>
+  <form action="{% url 'logbook:logbook-delete' logbook.id %}" method="post">
+    {% csrf_token %}
+    <input type="submit" value="Yes, delete it">
+    <a href="{% url 'logbook:logbook-detail' logbook.id %}">No, go back</a>
+  </form>
+{% endblock %}

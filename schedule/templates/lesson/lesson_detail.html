@@ -11,4 +11,5 @@
 {% if object.student %}
     <p>Uczeń: {{ object.student }}</p>
 {% endif %}
+    <a href="{% url 'logbook:logbook-list' %}?lesson={{ object.id }}">View Logbook Entries</a>
 {% endblock %}
