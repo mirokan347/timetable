@@ -21,7 +21,7 @@ from pages.views import homepage_view, contact_view
 
 urlpatterns = [
     path('', homepage_view, name='home'),
-    path('no_permission/', homepage_view, name='home'),
+    path('no_permission/', homepage_view, name='no_permission'),
     path('contact/', contact_view, name='contact'),
     path('admin/', admin.site.urls),
     path('schedule/', include('schedule.urls')),

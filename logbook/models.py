@@ -11,7 +11,7 @@ class Logbook(models.Model):
     student = models.OneToOneField(Student, related_name='logbook', on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, related_name='logbook', on_delete=models.CASCADE, default=None)
     lesson = models.ForeignKey(Lesson, related_name='logbook', on_delete=models.CASCADE, default=None)
-    grade = models.DecimalField(max_digits=2, decimal_places=1, default=None, blank=True, null=True)
+    grade = models.CharField(max_length=20, default=None, blank=True, null=True)
     comment = models.TextField(default=None, blank=True, null=True)
     PRESENT = "P"
     ABSENT = "A"

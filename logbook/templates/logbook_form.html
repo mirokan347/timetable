@@ -4,10 +4,11 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-  <h1>{{ title }}</h1>
-  <form method="post">
-  {% csrf_token %}
-  {{ form|crispy }}
+    <h1 class="mt-2">Logbook</h1>
+    <hr class="mt-0 mb-4">
+    <form method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
     <input type="submit" value="Save" class="btn btn-success">
-  </form>
+    </form>
 {% endblock %}

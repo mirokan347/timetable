@@ -15,7 +15,7 @@ class User(AbstractUser):
     username = None
     email = models.EmailField(_('email address'), unique=True)
     phone = models.BigIntegerField('phone number', blank=True, null=True)
-    address = models.CharField('address', max_length=255, blank=True, null=True)
+    address = models.TextField('address', max_length=255, blank=True, null=True)
     date_of_birth = models.DateField(null=True, blank=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -23,7 +23,7 @@ class User(AbstractUser):
     objects = CustomUserManager()
 
     def __str__(self):
-        return f'{self.first_name} {self.last_name} - {self.email}'
+        return f'{self.id} - {self.first_name} {self.last_name}'
 
 
 class Student(models.Model):

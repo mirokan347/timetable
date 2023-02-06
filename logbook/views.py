@@ -1,10 +1,11 @@
-from django.forms import formset_factory
+from django.forms import modelformset_factory
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy, reverse
 
-from .forms import LogbookForm
+from schedule.models import Lesson
+from .forms import LogbookForm, LogbookFormSet
 from .models import Logbook
 
 
@@ -20,7 +21,7 @@ class LogbookListView(UserPassesTestMixin, ListView):
         return redirect('/no_permission/')
 
 
-class LogbookDetailView(DetailView):
+class LogbookDetailView(UserPassesTestMixin, DetailView):
     model = Logbook
     template_name = 'logbook_detail.html'
 
@@ -32,8 +33,14 @@ class LogbookDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         return context
 
+    def test_func(self):
+        return self.request.user.has_perm('logbook.view_logbook')
 
-class LogbookCreateView(CreateView):
+    def handle_no_permission(self):
+        return redirect('/no_permission/')
+
+
+class LogbookCreateView(UserPassesTestMixin, CreateView):
     model = Logbook
     form_class = LogbookForm
     template_name = 'logbook_form.html'
@@ -43,6 +50,11 @@ class LogbookCreateView(CreateView):
         context = super().get_context_data(**kwargs)
         return context
 
+    def test_func(self):
+        return self.request.user.has_perm('logbook.create_logbook')
+
+    def handle_no_permission(self):
+        return redirect('/no_permission/')
 
 class LogbookUpdateView(UpdateView):
     model = Logbook
@@ -58,7 +70,7 @@ class LogbookUpdateView(UpdateView):
         return super().form_valid(form)
 
 
-class LogbookDeleteView(DeleteView):
+class LogbookDeleteView(UserPassesTestMixin, DeleteView):
     model = Logbook
     template_name = 'logbook_confirm_delete.html'
 
@@ -68,3 +80,35 @@ class LogbookDeleteView(DeleteView):
 
     def get_success_url(self):
         return reverse('schedule:lesson-list')
+
+    def test_func(self):
+        return self.request.user.has_perm('logbook.delete_logbook')
+
+    def handle_no_permission(self):
+        return redirect('/no_permission/')
+
+
+def logbook_update(request, lesson_id):
+    lesson = Lesson.objects.get(pk=lesson_id)
+    curr_grades = Logbook.objects.filter(lesson=lesson)
+
+    queryset = Logbook.objects.filter(lesson=lesson)
+
+    logbookFormSet = modelformset_factory(Logbook, form=LogbookFormSet, extra=0)
+
+    if request.method == 'POST':
+        formset = logbookFormSet(request.POST, queryset=queryset)
+        if formset.is_valid():
+            instances = formset.save(commit=False)
+            for instance in instances:
+                instance.save()
+            return redirect('schedule:lesson-detail', id=lesson_id)
+        else:
+            print(formset.errors)
+    else:
+        formset = logbookFormSet(queryset=queryset)
+
+    return render(
+        request, 'logbook_update_form.html', {'formset': formset, 'form': lesson},
+    )
+
