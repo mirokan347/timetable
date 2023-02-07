@@ -5,7 +5,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.urls import reverse_lazy, reverse
 
 from schedule.models import Lesson
-from .forms import LogbookForm, LogbookFormSet
+from .forms import LogbookForm, LogbookFormSet, LogbookUpdateForm
 from .models import Logbook
 
 
@@ -56,9 +56,10 @@ class LogbookCreateView(UserPassesTestMixin, CreateView):
     def handle_no_permission(self):
         return redirect('/no_permission/')
 
+
 class LogbookUpdateView(UpdateView):
     model = Logbook
-    form_class = LogbookForm
+    form_class = LogbookUpdateForm
     template_name = 'logbook_form.html'
 
     def get_object(self):

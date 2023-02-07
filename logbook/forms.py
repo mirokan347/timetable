@@ -5,8 +5,15 @@ from .models import Logbook
 
 
 class LogbookForm(forms.ModelForm):
+
+    class Meta:
+        model = Logbook
+        fields = ['student', 'lesson', 'subject', 'attendance', 'grade', 'comment']
+
+
+class LogbookUpdateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        super(LogbookForm, self).__init__(*args, **kwargs)
+        super(LogbookUpdateForm, self).__init__(*args, **kwargs)
         self.fields['student'].disabled = True
         self.fields['lesson'].disabled = True
         self.fields['subject'].disabled = True
