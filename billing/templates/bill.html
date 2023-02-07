@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="mt-2">Bills for {{ student }}</h1>
+	<hr class="mt-0 mb-4">
+  <table>
+    <thead>
+      <tr>
+        <th>Payment Type</th>
+        <th>Amount</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for bill in billing %}
+        <tr>
+          <td>{{ bill.typ }}</td>
+          <td>{{ bill.amount }}</td>
+          <td>{{ bill.date }}</td>
+            <td><a href="{% url 'billing:bill-detail' bill.id %}">Detail</a></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
