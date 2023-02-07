@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'schedule',
     'users',
     'logbook',
+    'billing'
 ]
 
 MIDDLEWARE = [
