@@ -1,4 +1,12 @@
-
-    <a class="nav-link" href="{% url 'home' %}">Home</a>
-    <a class="nav-link" href="{% url 'schedule:lesson-list' %}">Timetable</a>
+{% load auth_extras %}
+{% if request.user|has_group:"teacher" %}
+    <a class="nav-link" href="{% url 'admin:index' %}">Administration</a>
     <a class="nav-link" href="{% url 'schedule:lesson-create' %}">Create lesson</a>
+    <a class="nav-link" href="{% url 'schedule:lesson-list' %}">Timetable</a>
+{% endif %}
+
+{% if request.user|has_group:"parent" or request.user|has_group:"student" %}
+    <a class="nav-link" href="{% url 'schedule:lesson-list' %}">Timetable</a>
+    <a class="nav-link" href="{% url 'billing:bill' student_id=request.user.id %}">My bills</a>
+{% endif %}
+<p>{{ request.user.id }}</p>

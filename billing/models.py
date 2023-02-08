@@ -10,10 +10,11 @@ class Billing(models.Model):
     description = models.CharField(max_length=255, blank=True, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     is_paid = models.BooleanField(default=False)
-
+    PAYMENT = 'Payment'
+    BILL = 'Bill'
     TYP_CHOICES = [
-        ('payment', 'Payment'),
-        ('bill', 'Bill'),
+        (PAYMENT, 'Payment'),
+        (BILL, 'Bill'),
     ]
     typ = models.CharField(choices=TYP_CHOICES, max_length=10)
 
@@ -21,4 +22,4 @@ class Billing(models.Model):
         ordering = ['-date']
 
     def __str__(self):
-        return self.description
+        return f'{self.student} - {self.description}'

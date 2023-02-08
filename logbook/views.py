@@ -57,10 +57,16 @@ class LogbookCreateView(UserPassesTestMixin, CreateView):
         return redirect('/no_permission/')
 
 
-class LogbookUpdateView(UpdateView):
+class LogbookUpdateView(UserPassesTestMixin, UpdateView):
     model = Logbook
     form_class = LogbookUpdateForm
     template_name = 'logbook_form.html'
+
+    def test_func(self):
+        return self.request.user.has_perm('logbook.delete_logbook')
+
+    def handle_no_permission(self):
+        return redirect('error.html', {'message': 'Access Denied'})
 
     def get_object(self):
         id_ = self.kwargs.get("id")
@@ -92,6 +98,9 @@ class LogbookDeleteView(UserPassesTestMixin, DeleteView):
 def logbook_update(request, lesson_id):
     lesson = Lesson.objects.get(pk=lesson_id)
     curr_grades = Logbook.objects.filter(lesson=lesson)
+    if not request.user.groups.filter(name='teacher').exists():
+        print(request.user.groups.filter(name='teacher'))
+        return render(request, 'error.html', {'message': 'Access Denied'})
 
     queryset = Logbook.objects.filter(lesson=lesson)
 
