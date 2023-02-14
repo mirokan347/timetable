@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="mt-2">Payment for {{ teacher }}</h1>
+	<hr class="mt-0 mb-4">
+  <table>
+    <thead>
+      <tr>
+        <th>Payment Type</th>
+        <th>Amount</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for pay in payment %}
+        <tr>
+          <td>{{ pay.typ }}</td>
+          <td>{{ pay.amount }}</td>
+          <td>{{ pay.date }}</td>
+            <td><a href="{% url 'billing:payment-detail' pay.id %}">Detail</a></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

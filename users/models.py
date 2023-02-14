@@ -31,7 +31,7 @@ class Student(models.Model):
     enrollment_date = models.DateField()
 
     def save(self, *args, **kwargs):
-        student_group, created = Group.objects.get_or_create(name='Student')
+        student_group, created = Group.objects.get_or_create(name='student')
         self.user.groups.add(student_group)
         super().save(*args, **kwargs)
 
@@ -44,7 +44,7 @@ class Teacher(models.Model):
     start_date = models.DateField()
 
     def save(self, *args, **kwargs):
-        teacher_group, created = Group.objects.get_or_create(name='Teacher')
+        teacher_group, created = Group.objects.get_or_create(name='teacher')
         self.user.groups.add(teacher_group)
         super().save(*args, **kwargs)
 
@@ -58,7 +58,7 @@ class Parent(models.Model):
     relationship = models.CharField(max_length=20)
 
     def save(self, *args, **kwargs):
-        parent_group, created = Group.objects.get_or_create(name='Parent')
+        parent_group, created = Group.objects.get_or_create(name='parent')
         self.user.groups.add(parent_group)
         super().save(*args, **kwargs)
 

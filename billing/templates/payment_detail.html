@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="mt-2">Pay Detail for {{ teacher }}</h1>
+	<hr class="mt-0 mb-4">
+    <p>Amount: {{ pay.amount }}</p>
+    <p>Type: {{ pay.typ }}</p>
+    <p>Description: {{ pay.description }}</p>
+    <p>Date: {{ pay.date }}</p>
+    <p>Is paid: {{ pay.is_paid }}</p>
+
+{% endblock %}

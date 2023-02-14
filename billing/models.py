@@ -22,4 +22,7 @@ class Billing(models.Model):
         ordering = ['-date']
 
     def __str__(self):
-        return f'{self.student} - {self.description}'
+        if self.student:
+            return f'{self.student} - {self.description}'
+        elif self.teacher:
+            return f'{self.teacher} - {self.description}'
