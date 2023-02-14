@@ -14,7 +14,7 @@ from .managers import CustomUserManager
 class User(AbstractUser):
     username = None
     email = models.EmailField(_('email address'), unique=True)
-    phone = models.BigIntegerField('phone number', blank=True, null=True)
+    phone = models.CharField(blank=True, null=True, max_length=16, help_text='Contact phone number')
     address = models.TextField('address', max_length=255, blank=True, null=True)
     date_of_birth = models.DateField(null=True, blank=True)
     USERNAME_FIELD = 'email'

@@ -39,9 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # third party
     'datetimewidget',
     'crispy_forms',
-    # third party
 
     # own
     'pages',

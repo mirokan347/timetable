@@ -16,7 +16,7 @@
       </ul>
     {% if request.user.is_authenticated %}
       <div class="d-flex align-items-center">
-        <a class="btn btn-primary m-2" href="{% url 'users:view' user_id=request.user.id %}">Account</a>
+        <a class="btn btn-primary m-2" href="{% url 'users:view' user_id=request.user.id %}">{{ request.user.first_name }}</a>
         <a class="btn btn-outline-primary m-2" href="{% url 'users:logout' %}">Logout</a>
       </div>
     {% else %}
