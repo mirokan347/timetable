@@ -8,7 +8,7 @@ from users.models import Student, Teacher
 
 
 class Logbook(models.Model):
-    student = models.OneToOneField(Student, related_name='logbook', on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, related_name='logbook', on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, related_name='logbook', on_delete=models.CASCADE, default=None)
     lesson = models.ForeignKey(Lesson, related_name='logbook', on_delete=models.CASCADE, default=None)
     grade = models.CharField(max_length=20, default=None, blank=True, null=True)

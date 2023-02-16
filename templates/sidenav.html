@@ -2,17 +2,17 @@
 {% if request.user|has_group:"teacher" %}
     <a class="nav-link" href="{% url 'admin:index' %}">Administration</a>
     <a class="nav-link" href="{% url 'schedule:lesson-create' %}">Create lesson</a>
-    <a class="nav-link" href="{% url 'schedule:lesson-list' %}">Timetable</a>
+    <a class="nav-link" href="{% url 'schedule:timetable' %}">Timetable</a>
     <a class="nav-link" href="{% url 'billing:payment' user_id=request.user.id %}">My payments</a>
 {% endif %}
 
 {% if request.user|has_group:"student" %}
-    <a class="nav-link" href="{% url 'schedule:lesson-list' %}">Timetable</a>
+    <a class="nav-link" href="{% url 'schedule:timetable' %}">Timetable</a>
     <a class="nav-link" href="{% url 'billing:bill' user_id=request.user.id %}">My bills</a>
 {% endif %}
 
 {% if request.user|has_group:"parent" %}
-    <a class="nav-link" href="{% url 'schedule:lesson-list' %}">Timetable</a>
+    <a class="nav-link" href="{% url 'schedule:timetable' %}">Timetable</a>
     <a class="nav-link" href="{% url 'billing:bill_view' user_id=request.user.id %}">My bills</a>
 {% endif %}
 <p>{{ request.user.id }}</p>

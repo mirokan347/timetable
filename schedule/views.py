@@ -1,6 +1,11 @@
+from collections import defaultdict
+
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.urls import reverse, reverse_lazy
+from datetime import datetime, timedelta
+import calendar
 from django.views.generic import (
     CreateView,
     DetailView,
@@ -10,8 +15,8 @@ from django.views.generic import (
 )
 
 from logbook.models import Logbook
-from .forms import LessonModelForm
-from .models import Lesson
+from .forms import LessonModelForm, TimetableFilterForm
+from .models import Lesson, ClassGroup, Location, Subject
 
 
 class LessonCreateView(UserPassesTestMixin, CreateView):
@@ -80,10 +85,33 @@ class LessonDeleteView(DeleteView):
         return reverse('schedule:lesson-list')
 
 
-
-
-
-
-
-
-
+@login_required
+def timetable_view(request):
+    form = TimetableFilterForm(request.GET or None)
+    timetable = {}
+    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    if form.is_valid():
+        class_group = form.cleaned_data['class_group']
+        date = form.cleaned_data['date']
+        date_string = date.strftime('%Y-%m-%d')
+        datetime_object = datetime.strptime(date_string, '%Y-%m-%d')
+        week = datetime_object.isocalendar()[1]
+        # Get lessons for the selected week and class group
+        lessons = Lesson.objects.filter(class_group=class_group, start_time__week=week).order_by('start_time__hour',
+                                                                                                 'start_time__minute')
+        print(lessons)
+        for lesson in lessons:
+            print(type(lesson))
+            day = lesson.start_time.strftime('%A')
+            hour = lesson.start_time.strftime('%H:%M')
+            if hour not in timetable:
+                timetable[hour] = {}
+            if day not in timetable[hour]:
+                timetable[hour][day] = {}
+            timetable[hour][day][lesson.id] = lesson
+        print(timetable)
+    context = {'form': form,
+               'timetable': timetable,
+               'days': days
+               }
+    return render(request, 'timetable/timetable.html', context)

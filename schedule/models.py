@@ -56,5 +56,5 @@ class Lesson(models.Model):
         return reverse("schedule:lesson-detail", kwargs={"id": self.id})
 
     def __str__(self):
-        return f'{self.subject} - {self.class_group} - {self.location}'
+        return f'{self.subject} \n {self.class_group} \n {self.location}'
 

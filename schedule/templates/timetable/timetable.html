@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <h1 class="mt-2">Timetable</h1>
+    <hr class="mt-0 mb-4">
+  <form method="get" class="form-inline">
+
+    <div class="form-group mb-2">{{ form.class_group|as_crispy_field }}</div>
+
+    <div class="form-group mx-sm-3 mb-2">{{ form.date|as_crispy_field }}</div>
+
+     <div class="form-group mb-2"><button type="submit" class="btn btn-primary btn-sm">Filter</button></div>
+
+  </form>
+
+  {% if timetable %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Time</th>
+          <th scope="col">Monday</th>
+          <th scope="col">Tuesday</th>
+          <th scope="col">Wednesday</th>
+          <th scope="col">Thursday</th>
+          <th>Friday</th>
+          <th>Saturday</th>
+          <th>Sunday</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for hour, lessons_by_day in timetable.items %}
+          <tr>
+              <td><div>{{ hour }}</div></td>
+            {% for day in days %}
+              {% if day in lessons_by_day %}
+                <td>
+                  {% for day, lesson_by_id in lessons_by_day.items %}
+                      {% for id, lesson in lesson_by_id.items %}
+                          <div><a href='{{ lesson.get_absolute_url }}'>{{ lesson.subject }}</a></div>
+                          <div>{{ lesson.class_group.name }}</div>
+                          <div>{{ lesson.location }}</div>
+                      {% endfor %}
+                      <br>
+                  {% endfor %}
+                </td>
+              {% else %}
+                <td></td>
+              {% endif %}
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+      <div><p>No lessons found.</p></div>
+  {% endif %}
+{% endblock %}

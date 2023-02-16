@@ -2,14 +2,14 @@
 
 {% block content %}
 <h1>{{ object.subject }}</h1>
-<p>Miejsce: {{ object.location }}</p>
-<p>start: {{ object.start_time }}</p>
-<p>Koniec: {{ object.end_time }}</p>
+<p>Location: {{ object.location }}</p>
+<p>start lesson: {{ object.start_time }}</p>
+<p>End lesson: {{ object.end_time }}</p>
 {% if object.class_group %}
-    <p>Grupa: {{ object.class_group }}</p>
+    <p>Class group: {{ object.class_group }}</p>
 {% endif %}
 {% if object.student %}
-    <p>Uczeń: {{ object.student }}</p>
+    <p>Student: {{ object.student }}</p>
 {% endif %}
     <p><a href="{% url 'logbook:logbook-list' %}?lesson={{ object.id }}">View Logbook Entries</a></p>
     <p><a href="{% url 'logbook:logbook_update' object.id %}">Edit Logbook</a></p>
