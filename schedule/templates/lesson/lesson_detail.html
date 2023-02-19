@@ -1,15 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>{{ object.subject }}</h1>
+<h1 class="mt-2">{{ object.subject }}</h1>
+<hr class="mt-0 mb-4">
 <p>Location: {{ object.location }}</p>
 <p>start lesson: {{ object.start_time }}</p>
 <p>End lesson: {{ object.end_time }}</p>
 {% if object.class_group %}
     <p>Class group: {{ object.class_group }}</p>
 {% endif %}
-{% if object.student %}
-    <p>Student: {{ object.student }}</p>
+{% if object.students %}
+    <p>Students: {{ object.students }}</p>
 {% endif %}
     <p><a href="{% url 'logbook:logbook-list' %}?lesson={{ object.id }}">View Logbook Entries</a></p>
     <p><a href="{% url 'logbook:logbook_update' object.id %}">Edit Logbook</a></p>

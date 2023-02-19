@@ -48,7 +48,7 @@ class Lesson(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, blank=True, null=True, default=None)
+    students = models.ManyToManyField(Student, blank=True)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, default=None)
     class_group = models.ForeignKey(ClassGroup, on_delete=models.CASCADE, blank=True, null=True, default=None)
 

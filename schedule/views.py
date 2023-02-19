@@ -27,15 +27,21 @@ class LessonCreateView(UserPassesTestMixin, CreateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
+        lesson = self.object
         class_group = form.cleaned_data.get('class_group')
-        student1 = form.cleaned_data.get('student')
+        students_no_group = form.cleaned_data.get('students')
         subject = form.cleaned_data.get('subject')
+        lesson.students.set(students_no_group)
+        lesson.save()
+
         if class_group:
             students = class_group.members.all()
             for student in students:
-                Logbook.objects.create(student=student, lesson=self.object, subject=subject)
-        if student1:
-            Logbook.objects.create(student=student, lesson=self.object, subject=subject)
+                Logbook.objects.create(student=student, lesson=lesson, subject=subject)
+        if students_no_group:
+            for student in students_no_group:
+                Logbook.objects.create(student=student, lesson=lesson, subject=subject)
+
         return response
 
     def test_func(self):

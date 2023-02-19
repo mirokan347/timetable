@@ -1,12 +1,36 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<h1 class="mt-2">Lesson List</h1>
 
-{% for instance in object_list %}
-     <p>{{ instance.id }} - <a href='{{ instance.get_absolute_url }}'>{{ instance.subject }}</a></p>
+<table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Lesson</th>
+                <th>Start time</th>
+                <th>End time</th>
+                <th>Teacher</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+{% for lesson in object_list %}
+    <tr>
+        <td><a href='{{ lesson.get_absolute_url }}'>{{ lesson.subject }}</a></td>
+        <td>{{ lesson.start_time }}</td>
+        <td>{{ lesson.end_time }}</td>
+        <td>{{ lesson.teacher }}</td>
+        <td><a href="{% url 'schedule:lesson-detail' lesson.id %}">View</a></td>
+        <td><a href="{% url 'schedule:lesson-update' lesson.id %}">Edit</a></td>
+        <td><a href="{% url 'schedule:lesson-delete' lesson.id %}">Delete</a></td>
+
+    </tr>
+
 {% endfor %}
-
-
+        </tbody>
+</table>
 {% endblock %}
 <!--
 <div class="container">

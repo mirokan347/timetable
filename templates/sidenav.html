@@ -3,6 +3,7 @@
     <a class="nav-link" href="{% url 'admin:index' %}">Administration</a>
     <a class="nav-link" href="{% url 'schedule:lesson-create' %}">Create lesson</a>
     <a class="nav-link" href="{% url 'schedule:timetable' %}">Timetable</a>
+    <a class="nav-link" href="{% url 'schedule:lesson-list' %}">Lesson list</a>
     <a class="nav-link" href="{% url 'billing:payment' user_id=request.user.id %}">My payments</a>
 {% endif %}
 

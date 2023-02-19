@@ -14,6 +14,14 @@ class LogbookListView(UserPassesTestMixin, ListView):
     template_name = 'logbook_list.html'
     context_object_name = 'logbooks'
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        lesson_id = self.request.GET.get('lesson')
+        if lesson_id:
+            return Logbook.objects.filter(lesson_id=lesson_id)
+        else:
+            return Logbook.objects.all()
+
     def test_func(self):
         return self.request.user.has_perm('logbook.view_logbook')
 
@@ -121,4 +129,3 @@ def logbook_update(request, lesson_id):
     return render(
         request, 'logbook_update_form.html', {'formset': formset, 'form': lesson},
     )
-

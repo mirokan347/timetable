@@ -5,9 +5,10 @@
 {% block content %}
   <h1>Confirm Deletion</h1>
   <p>Are you sure you want to delete the logbook entry?</p>
-  <form action="{% url 'logbook:logbook-delete' logbook.id %}" method="post">
+  <form action="" method="post">
     {% csrf_token %}
-    <input type="submit" value="Yes, delete it">
-    <a href="{% url 'logbook:logbook-detail' logbook.id %}">No, go back</a>
+    <input type="submit" class="btn btn-danger" value="Yes">
+      <a class="btn btn-success" href="{% url 'logbook:logbook-list' %}">Cancel</a>
   </form>
+
 {% endblock %}
