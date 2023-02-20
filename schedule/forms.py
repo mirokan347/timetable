@@ -78,8 +78,21 @@ class TimetableFilterForm(forms.Form):
     class_group = forms.ModelChoiceField(
         queryset=ClassGroup.objects.all(),
         required=False,
+        empty_label='All',
         label='Class Group'
     )
-    date = forms.DateField(widget=DateInput(attrs={'type': 'date'}), input_formats=['%Y-%m-%d'], required=False)
+    date = forms.DateField(
+        widget=DateInput(attrs={'type': 'date'}),
+        input_formats=['%Y-%m-%d'], required=False
+    )
 
+    def __init__(self, user, *args, **kwargs):
+        super(TimetableFilterForm, self).__init__(*args, **kwargs)
+
+        if user.groups.filter(name='teacher').exists():
+            self.fields['student'] = forms.ModelChoiceField(queryset=Student.objects.all(), required=False)
+        elif user.groups.filter(name='student').exists():
+            self.fields['student'] = forms.ModelChoiceField(queryset=Student.objects.filter(user=user), required=False)
+        elif user.groups.filter(name='parent').exists():
+            self.fields['student'] = forms.ModelChoiceField(queryset=Student.objects.filter(parent=user), required=False)
 

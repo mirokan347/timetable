@@ -10,6 +10,8 @@
 
     <div class="form-group mx-sm-3 mb-2">{{ form.date|as_crispy_field }}</div>
 
+    <div class="form-group mb-2">{{ form.student|as_crispy_field }}</div>
+
      <div class="form-group mb-2"><button type="submit" class="btn btn-primary btn-sm">Filter</button></div>
 
   </form>
@@ -19,13 +21,9 @@
       <thead>
         <tr>
           <th scope="col">Time</th>
-          <th scope="col">Monday</th>
-          <th scope="col">Tuesday</th>
-          <th scope="col">Wednesday</th>
-          <th scope="col">Thursday</th>
-          <th scope="col">Friday</th>
-          <th scope="col">Saturday</th>
-          <th scope="col">Sunday</th>
+          {% for day in name_days %}
+              <th scope="col">{{ day }}</th>
+          {% endfor %}
         </tr>
       </thead>
       <tbody>
@@ -35,13 +33,14 @@
             {% for day in days %}
               {% if day in lessons_by_day %}
                 <td>
-                  {% for day, lesson_by_id in lessons_by_day.items %}
-                      {% for id, lesson in lesson_by_id.items %}
-                          <div><a href='{{ lesson.get_absolute_url }}'>{{ lesson.subject }}</a></div>
-                          <div>{{ lesson.class_group.name }}</div>
-                          <div>{{ lesson.location }}</div>
-                      {% endfor %}
-                      <br>
+                  {% for lesson_day, lesson_by_id in lessons_by_day.items %}
+                      {% if day == lesson_day %}
+                          {% for id, lesson in lesson_by_id.items %}
+                              <div><a href='{{ lesson.get_absolute_url }}'>{{ lesson.subject }}</a></div>
+                              <div>{{ lesson.class_group.name }}</div>
+                              <div>{{ lesson.location }}</div>
+                          {% endfor %}
+                      {% endif %}
                   {% endfor %}
                 </td>
               {% else %}

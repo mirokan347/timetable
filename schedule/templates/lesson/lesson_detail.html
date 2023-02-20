@@ -10,7 +10,10 @@
     <p>Class group: {{ object.class_group }}</p>
 {% endif %}
 {% if object.students %}
-    <p>Students: {{ object.students }}</p>
+    <p>Students</p>
+    {% for student in object.students.all %}
+        <p>{{ student }}</p>
+    {% endfor %}
 {% endif %}
     <p><a href="{% url 'logbook:logbook-list' %}?lesson={{ object.id }}">View Logbook Entries</a></p>
     <p><a href="{% url 'logbook:logbook_update' object.id %}">Edit Logbook</a></p>

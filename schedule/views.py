@@ -53,7 +53,31 @@ class LessonCreateView(UserPassesTestMixin, CreateView):
 
 class LessonListView(ListView):
     template_name = 'lesson/lesson_list.html'
-    queryset = Lesson.objects.all()
+    context_object_name = 'lessons'
+    model = Lesson
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        form = TimetableFilterForm(self.request.user, data=self.request.GET)
+        context['form'] = form
+
+        return context
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        class_group_id = self.request.GET.get('class_group', None)
+        date = self.request.GET.get('date', None)
+        student_id = self.request.GET.get('student', None)
+        if class_group_id:
+            queryset = queryset.filter(class_group_id=class_group_id)
+        if date:
+            date_obj = datetime.strptime(date, '%Y-%m-%d').date()
+            start_date = date_obj - timedelta(days=date_obj.weekday())
+            end_date = start_date + timedelta(days=6)
+            queryset = queryset.filter(start_time__range=(start_date, end_date))
+        if student_id:
+            queryset = queryset.filter(students__id=student_id)
+        return queryset
 
 
 class LessonDetailView(DetailView):
@@ -66,6 +90,7 @@ class LessonDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
+
 
 class LessonUpdateView(UpdateView):
     template_name = 'lesson/lesson_create.html'
@@ -93,31 +118,49 @@ class LessonDeleteView(DeleteView):
 
 @login_required
 def timetable_view(request):
-    form = TimetableFilterForm(request.GET or None)
+    def week_days(date_):
+        lst = []
+        days_ = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        start_of_week = date_ - timedelta(days=date_.weekday())
+        for i, week_day in enumerate(days_):
+            date_day = start_of_week + timedelta(days=i)
+            lst.append(f"{week_day}\n{date_day.strftime('%d.%m.%Y')}")
+        return lst
+
+    days = name_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    form = TimetableFilterForm(request.user, data=request.GET)
     timetable = {}
-    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
     if form.is_valid():
         class_group = form.cleaned_data['class_group']
+        student = form.cleaned_data['student']
         date = form.cleaned_data['date']
-        date_string = date.strftime('%Y-%m-%d')
-        datetime_object = datetime.strptime(date_string, '%Y-%m-%d')
-        week = datetime_object.isocalendar()[1]
-        # Get lessons for the selected week and class group
-        lessons = Lesson.objects.filter(class_group=class_group, start_time__week=week).order_by('start_time__hour',
-                                                                                                 'start_time__minute')
-        print(lessons)
-        for lesson in lessons:
-            print(type(lesson))
-            day = lesson.start_time.strftime('%A')
-            hour = lesson.start_time.strftime('%H:%M')
-            if hour not in timetable:
-                timetable[hour] = {}
-            if day not in timetable[hour]:
-                timetable[hour][day] = {}
-            timetable[hour][day][lesson.id] = lesson
-        print(timetable)
+        if date:
+            date_string = date.strftime('%Y-%m-%d')
+            datetime_object = datetime.strptime(date_string, '%Y-%m-%d')
+            week = datetime_object.isocalendar()[1]
+            # Get lessons for the selected week and class group
+            if class_group:
+                lessons = Lesson.objects.filter(class_group=class_group, start_time__week=week).order_by(
+                    'start_time__hour', 'start_time__minute')
+            elif student:
+                lessons = Lesson.objects.filter(students__id=student.id, start_time__week=week).order_by(
+                    'start_time__hour', 'start_time__minute')
+            else:
+                lessons = Lesson.objects.filter(start_time__week=week).order_by('start_time__hour', 'start_time__minute')
+            name_days = week_days(date)
+            for lesson in lessons:
+                day = lesson.start_time.strftime('%A')
+                hour = lesson.start_time.strftime('%H:%M')
+                if hour not in timetable:
+                    timetable[hour] = {}
+                if day not in timetable[hour]:
+                    timetable[hour][day] = {}
+                timetable[hour][day][lesson.id] = lesson
+            print(timetable)
     context = {'form': form,
                'timetable': timetable,
-               'days': days
+               'days': days,
+               'name_days': name_days
                }
     return render(request, 'timetable/timetable.html', context)
