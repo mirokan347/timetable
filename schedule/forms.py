@@ -5,7 +5,7 @@ from datetimewidget.widgets import DateTimeWidget
 from django.forms import DateTimeField
 from django.forms.widgets import DateInput, DateTimeInput
 
-from users.models import Student
+from users.models import Student, Teacher, Parent
 from .models import Lesson, ClassGroup
 
 
@@ -88,11 +88,25 @@ class TimetableFilterForm(forms.Form):
 
     def __init__(self, user, *args, **kwargs):
         super(TimetableFilterForm, self).__init__(*args, **kwargs)
-
         if user.groups.filter(name='teacher').exists():
             self.fields['student'] = forms.ModelChoiceField(queryset=Student.objects.all(), required=False)
         elif user.groups.filter(name='student').exists():
             self.fields['student'] = forms.ModelChoiceField(queryset=Student.objects.filter(user=user), required=False)
         elif user.groups.filter(name='parent').exists():
-            self.fields['student'] = forms.ModelChoiceField(queryset=Student.objects.filter(parent=user), required=False)
+            parent = Parent.objects.get(user=user)
+            students = parent.students.values_list('id', flat=True)
+            self.fields['student'] = forms.ModelChoiceField(queryset=Student.objects.filter(id__in=students), required=False)
 
+
+class TimetableTeacherFilterForm(forms.Form):
+    class_group = forms.ModelChoiceField(
+        queryset=ClassGroup.objects.all(),
+        required=False,
+        empty_label='All',
+        label='Class Group'
+    )
+    date = forms.DateField(
+        widget=DateInput(attrs={'type': 'date'}),
+        input_formats=['%Y-%m-%d'], required=False
+    )
+    teacher = forms.ModelChoiceField(queryset=Teacher.objects.all(), required=False)

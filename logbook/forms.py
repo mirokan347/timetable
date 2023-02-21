@@ -31,3 +31,13 @@ class LogbookFormSet(forms.ModelForm):
     class Meta:
         model = Logbook
         fields = ['student', 'attendance', 'grade']
+
+
+class LogbookFilterForm(forms.Form):
+    student = forms.ModelChoiceField(queryset=None)
+
+    def __init__(self, *args, **kwargs):
+        parent = kwargs.pop('parent', None)
+        super().__init__(*args, **kwargs)
+        if parent:
+            self.fields['student'].queryset = parent.students.all()

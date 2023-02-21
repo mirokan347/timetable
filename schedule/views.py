@@ -15,7 +15,7 @@ from django.views.generic import (
 )
 
 from logbook.models import Logbook
-from .forms import LessonModelForm, TimetableFilterForm
+from .forms import LessonModelForm, TimetableFilterForm, TimetableTeacherFilterForm
 from .models import Lesson, ClassGroup, Location, Subject
 
 
@@ -58,25 +58,25 @@ class LessonListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        form = TimetableFilterForm(self.request.user, data=self.request.GET)
+        form = TimetableTeacherFilterForm(self.request.GET or None)
         context['form'] = form
 
         return context
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().order_by('start_time')
         class_group_id = self.request.GET.get('class_group', None)
         date = self.request.GET.get('date', None)
-        student_id = self.request.GET.get('student', None)
+        teacher_id = self.request.GET.get('teacher', None)
         if class_group_id:
             queryset = queryset.filter(class_group_id=class_group_id)
         if date:
             date_obj = datetime.strptime(date, '%Y-%m-%d').date()
             start_date = date_obj - timedelta(days=date_obj.weekday())
             end_date = start_date + timedelta(days=6)
-            queryset = queryset.filter(start_time__range=(start_date, end_date))
-        if student_id:
-            queryset = queryset.filter(students__id=student_id)
+            queryset = queryset.filter(start_time__range=(start_date, end_date)).order_by('start_time')
+        if teacher_id:
+            queryset = queryset.filter(teacher__id=teacher_id)
         return queryset
 
 

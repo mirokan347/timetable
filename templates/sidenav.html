@@ -9,11 +9,13 @@
 
 {% if request.user|has_group:"student" %}
     <a class="nav-link" href="{% url 'schedule:timetable' %}">Timetable</a>
+    <a class="nav-link" href="{% url 'logbook:logbook-list' %}?student={{ request.user.id }}">My Logbook</a>
     <a class="nav-link" href="{% url 'billing:bill' user_id=request.user.id %}">My bills</a>
 {% endif %}
 
 {% if request.user|has_group:"parent" %}
     <a class="nav-link" href="{% url 'schedule:timetable' %}">Timetable</a>
+    <a class="nav-link" href="{% url 'logbook:logbook_parent_view' user_id=request.user.id %}">My Logbook</a>
     <a class="nav-link" href="{% url 'billing:bill_view' user_id=request.user.id %}">My bills</a>
 {% endif %}
 <p>{{ request.user.id }}</p>

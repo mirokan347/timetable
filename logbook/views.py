@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.forms import modelformset_factory
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.mixins import UserPassesTestMixin
@@ -5,7 +6,8 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.urls import reverse_lazy, reverse
 
 from schedule.models import Lesson
-from .forms import LogbookForm, LogbookFormSet, LogbookUpdateForm
+from users.models import Parent
+from .forms import LogbookForm, LogbookFormSet, LogbookUpdateForm, LogbookFilterForm
 from .models import Logbook
 
 
@@ -17,10 +19,14 @@ class LogbookListView(UserPassesTestMixin, ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         lesson_id = self.request.GET.get('lesson')
+        student_id = self.request.GET.get('student')
         if lesson_id:
             return Logbook.objects.filter(lesson_id=lesson_id)
+        elif student_id:
+            return Logbook.objects.filter(student_id=student_id)
         else:
             return Logbook.objects.all()
+
 
     def test_func(self):
         return self.request.user.has_perm('logbook.view_logbook')
@@ -103,6 +109,7 @@ class LogbookDeleteView(UserPassesTestMixin, DeleteView):
         return redirect('/no_permission/')
 
 
+@login_required
 def logbook_update(request, lesson_id):
     lesson = Lesson.objects.get(pk=lesson_id)
     curr_grades = Logbook.objects.filter(lesson=lesson)
@@ -129,3 +136,23 @@ def logbook_update(request, lesson_id):
     return render(
         request, 'logbook_update_form.html', {'formset': formset, 'form': lesson},
     )
+
+
+@login_required
+def logbook_parent_view(request, user_id):
+    if request.user.groups.filter(name='parent').exists():
+        parent = get_object_or_404(Parent, user_id=user_id)
+        form = LogbookFilterForm(request.POST or None, parent=parent)
+        if form.is_valid():
+            student = form.cleaned_data.get('student')
+            logbooks = Logbook.objects.filter(student=student)
+            context = {
+                'form': form,
+                'student': student,
+                'logbooks': logbooks
+            }
+            return render(request, 'logbook_parent.html', context)
+    else:
+        form = None
+    context = {'form': form}
+    return render(request, 'logbook_parent.html', context)
