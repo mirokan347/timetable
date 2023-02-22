@@ -18,3 +18,9 @@ def contact_view(request, *args, **kwargs):
     }
     return render(request, 'contact.html', my_context)
 
+
+def no_permission_view(request, *args, **kwargs):
+    my_context = {
+        "info": 'Access denied<'
+    }
+    return render(request, 'no_permission.html', my_context)
