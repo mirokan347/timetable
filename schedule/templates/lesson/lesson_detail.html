@@ -1,20 +1,35 @@
 {% extends 'base.html' %}
+{% load auth_extras %}
 
 {% block content %}
 <h1 class="mt-2">{{ object.subject }}</h1>
 <hr class="mt-0 mb-4">
-<p>Location: {{ object.location }}</p>
-<p>start lesson: {{ object.start_time }}</p>
-<p>End lesson: {{ object.end_time }}</p>
-{% if object.class_group %}
-    <p>Class group: {{ object.class_group }}</p>
+<div class="card" style="width: 18rem;">
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item"><b>Location:</b> {{ object.location }}</li>
+        <li class="list-group-item"><b>start lesson:</b> {{ object.start_time }}</li>
+        <li class="list-group-item"><b>End lesson:</b> {{ object.end_time }}</li>
+        <li class="list-group-item"><b>Teacher:</b> {{ object.teacher }}</li>
+        {% if object.class_group %}
+            <li class="list-group-item"><b>Class group:</b> {{ object.class_group }}</li>
+        {% endif %}
+    </ul>
+</div><br>
+{% if object.students.exists %}
+    <div class="card" style="width: 18rem;">
+        <div class="card-header">
+            Students
+        </div>
+        <ul class="list-group list-group-flush">
+            {% for student in object.students.all %}
+            <li class="list-group-item">{{ student }}</li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endif %}
-{% if object.students %}
-    <p>Students</p>
-    {% for student in object.students.all %}
-        <p>{{ student }}</p>
-    {% endfor %}
-{% endif %}
-    <p><a href="{% url 'logbook:logbook-list' %}?lesson={{ object.id }}">View Logbook Entries</a></p>
-    <p><a href="{% url 'logbook:logbook_update' object.id %}">Edit Logbook</a></p>
+    <br>
+    {% if request.user|has_group:"teacher" %}
+        <a class="btn btn-info" href="{% url 'logbook:logbook-list' %}?lesson={{ object.id }}">View Logbook Entries</a>
+        <a class="btn btn-primary" href="{% url 'logbook:logbook_update' object.id %}">Edit Logbook</a>
+    {% endif %}
 {% endblock %}

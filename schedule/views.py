@@ -51,7 +51,7 @@ class LessonCreateView(UserPassesTestMixin, CreateView):
         return redirect('/no_permission/')
 
 
-class LessonListView(ListView):
+class LessonListView(UserPassesTestMixin, ListView):
     template_name = 'lesson/lesson_list.html'
     context_object_name = 'lessons'
     model = Lesson
@@ -79,8 +79,14 @@ class LessonListView(ListView):
             queryset = queryset.filter(teacher__id=teacher_id)
         return queryset
 
+    def test_func(self):
+        return self.request.user.has_perm('schedule.view_lesson')
 
-class LessonDetailView(DetailView):
+    def handle_no_permission(self):
+        return redirect('/no_permission/')
+
+
+class LessonDetailView(UserPassesTestMixin, DetailView):
     template_name = 'lesson/lesson_detail.html'
 
     def get_object(self):
@@ -91,8 +97,14 @@ class LessonDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         return context
 
+    def test_func(self):
+        return self.request.user.has_perm('schedule.view_lesson')
 
-class LessonUpdateView(UpdateView):
+    def handle_no_permission(self):
+        return redirect('/no_permission/')
+
+
+class LessonUpdateView(UserPassesTestMixin, UpdateView):
     template_name = 'lesson/lesson_create.html'
     form_class = LessonModelForm
 
@@ -104,8 +116,14 @@ class LessonUpdateView(UpdateView):
         print(form.cleaned_data)
         return super().form_valid(form)
 
+    def test_func(self):
+        return self.request.user.has_perm('schedule.delete_lesson')
 
-class LessonDeleteView(DeleteView):
+    def handle_no_permission(self):
+        return redirect('/no_permission/')
+
+
+class LessonDeleteView(UserPassesTestMixin, DeleteView):
     template_name = 'lesson/lesson_delete.html'
 
     def get_object(self):
@@ -114,6 +132,12 @@ class LessonDeleteView(DeleteView):
 
     def get_success_url(self):
         return reverse('schedule:lesson-list')
+
+    def test_func(self):
+        return self.request.user.has_perm('schedule.delete_lesson')
+
+    def handle_no_permission(self):
+        return redirect('/no_permission/')
 
 
 @login_required

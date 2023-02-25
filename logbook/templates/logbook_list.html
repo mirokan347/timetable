@@ -15,7 +15,7 @@
                     <th>Subject</th>
                     <th>Attendance</th>
                     <th>Grade</th>
-                    <th>Comment</th>
+                    <th>Detail</th>
                 {% endif %}
             </tr>
         </thead>
@@ -26,20 +26,20 @@
                         <td>{{ logbook.student }}</td>
                         <td>{{ logbook.attendance }}</td>
                         <td>{{ logbook.grade }}</td>
-                        <td><a href="{% url 'logbook:logbook-detail' logbook.id %}">View</a></td>
-                        <td><a href="{% url 'logbook:logbook-update' logbook.id %}">Edit</a></td>
-                        <td><a href="{% url 'logbook:logbook-delete' logbook.id %}">Delete</a></td>
+                        <td><a class="btn btn-info btn-sm" href="{% url 'logbook:logbook-detail' logbook.id %}">View</a></td>
+                        <td><a class="btn btn-primary btn-sm" href="{% url 'logbook:logbook-update' logbook.id %}">Edit</a></td>
+                        <td><a class="btn btn-danger btn-sm" href="{% url 'logbook:logbook-delete' logbook.id %}">Delete</a></td>
                     {% else %}
                         <td>{{ logbook.subject }}</td>
                         <td>{{ logbook.attendance }}</td>
                         <td>{{ logbook.grade }}</td>
-                        <td>{{ logbook.comment }}</td>
+                        <td><a class="btn btn-info btn-sm" href="{% url 'logbook:logbook-detail' logbook.id %}">View</a></td>
                     {% endif %}
                 </tr>
             {% endfor %}
         </tbody>
     </table>
     {% if request.user|has_group:"teacher" %}
-        <a href="{% url 'logbook:logbook-create' %}">Create a new Logbook</a>
+        <a class="btn btn-primary" href="{% url 'logbook:logbook-create' %}">Create a new Logbook</a>
     {% endif %}
 {% endblock %}

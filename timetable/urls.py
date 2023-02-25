@@ -16,12 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
-from pages.views import homepage_view, contact_view
+from pages.views import homepage_view, contact_view, no_permission_view
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 
 urlpatterns = [
     path('', homepage_view, name='home'),
-    path('no_permission/', homepage_view, name='no_permission'),
+    path('no_permission/', no_permission_view, name='no_permission'),
     path('contact/', contact_view, name='contact'),
     path('admin/', admin.site.urls),
     path('schedule/', include('schedule.urls')),
@@ -47,3 +48,4 @@ urlpatterns = [
          auth_views.PasswordResetCompleteView.as_view(template_name='password_reset/password_reset_complete.html'),
          name='password_reset_complete'),
 ]
+urlpatterns += staticfiles_urlpatterns()

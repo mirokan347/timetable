@@ -3,10 +3,18 @@
 {% block content %}
     <h1 class="mt-2">Pay Detail for {{ teacher }}</h1>
 	<hr class="mt-0 mb-4">
-    <p>Amount: {{ pay.amount }}</p>
-    <p>Type: {{ pay.typ }}</p>
-    <p>Description: {{ pay.description }}</p>
-    <p>Date: {{ pay.date }}</p>
-    <p>Is paid: {{ pay.is_paid }}</p>
-
+    <div class="card" style="width: 18rem;">
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item"><b>Amount:</b> {{ pay.amount }} zł</li>
+        <li class="list-group-item"><b>Type:</b> {{ pay.typ }}</li>
+        <li class="list-group-item"><b>Description:</b> {{ pay.description }}</li>
+        <li class="list-group-item"><b>Date:</b> {{ pay.date }}</li>
+        <li class="list-group-item"><b>Is paid:</b>
+        {% if pay.is_paid %}
+            Yes
+        {% else %}
+            No
+        {% endif %}</li>
+    </ul>
+    </div>
 {% endblock %}

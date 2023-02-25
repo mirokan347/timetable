@@ -1,12 +1,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
     <h1 class="mt-2">Bill Detail for {{ student }}</h1>
 	<hr class="mt-0 mb-4">
-    <p>Amount: {{ bill.amount }}</p>
-    <p>Type: {{ bill.typ }}</p>
-    <p>Description: {{ bill.description }}</p>
-    <p>Date: {{ bill.date }}</p>
-    <p>Is paid: {{ bill.is_paid }}</p>
 
+    <div class="card" style="width: 18rem;">
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item"><b>Amount:</b> {{ bill.amount }}</li>
+        <li class="list-group-item"><b>Type:</b> {{ bill.typ }}</li>
+        <li class="list-group-item"><b>Description:</b> {{ bill.description }}</li>
+        <li class="list-group-item"><b>Date:</b> {{ bill.date }}</li>
+        <li class="list-group-item"><b>Is paid:</b>
+        {% if bill.is_paid %}
+            Yes
+        {% else %}
+            No
+        {% endif %}</li>
+    </ul>
+    </div>
 {% endblock %}

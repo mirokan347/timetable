@@ -26,7 +26,6 @@
                 <th>Teacher</th>
                 <th></th>
                 <th></th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -37,9 +36,8 @@
         <td>{{ lesson.start_time }}</td>
         <td>{{ lesson.end_time }}</td>
         <td>{{ lesson.teacher }}</td>
-        <td><a href="{% url 'schedule:lesson-detail' lesson.id %}">View</a></td>
-        <td><a href="{% url 'schedule:lesson-update' lesson.id %}">Edit</a></td>
-        <td><a href="{% url 'schedule:lesson-delete' lesson.id %}">Delete</a></td>
+        <td><a class="btn btn-primary btn-sm" href="{% url 'schedule:lesson-update' lesson.id %}">Edit</a></td>
+        <td><a class="btn btn-danger btn-sm" href="{% url 'schedule:lesson-delete' lesson.id %}">Delete</a></td>
 
     </tr>
 
@@ -47,16 +45,3 @@
         </tbody>
 </table>
 {% endblock %}
-<!--
-<div class="container">
-  <div class="row">
-    <div class="col-12">
-        <input type="text" class="form-control datepicker">
-    </div>
-  </div>
-</div>
-$('.datepicker').datepicker({
-    format: 'mm/dd/yyyy',
-    startView: 2,
-    minViewMode: 1
-});-->

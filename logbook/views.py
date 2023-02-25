@@ -19,14 +19,15 @@ class LogbookListView(UserPassesTestMixin, ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         lesson_id = self.request.GET.get('lesson')
-        student_id = self.request.GET.get('student')
-        if lesson_id:
+        user_id = self.request.GET.get('student')
+        print(user_id)
+        print(self.request.user.id)
+        if lesson_id and self.request.user.groups.filter(name='teacher').exists():
             return Logbook.objects.filter(lesson_id=lesson_id)
-        elif student_id:
-            return Logbook.objects.filter(student_id=student_id)
+        elif int(user_id) == int(self.request.user.id):
+            return Logbook.objects.filter(student__user_id=user_id)
         else:
-            return Logbook.objects.all()
-
+            print('no permission')
 
     def test_func(self):
         return self.request.user.has_perm('logbook.view_logbook')
@@ -80,7 +81,7 @@ class LogbookUpdateView(UserPassesTestMixin, UpdateView):
         return self.request.user.has_perm('logbook.delete_logbook')
 
     def handle_no_permission(self):
-        return redirect('error.html', {'message': 'Access Denied'})
+        return redirect('/no_permission/')
 
     def get_object(self):
         id_ = self.kwargs.get("id")
@@ -117,7 +118,7 @@ def logbook_update(request, lesson_id):
         print(request.user.groups.filter(name='teacher'))
         return render(request, 'error.html', {'message': 'Access Denied'})
 
-    queryset = Logbook.objects.filter(lesson=lesson)
+    queryset = Logbook.objects.filter(lesson=lesson).order_by('student_id')
 
     logbookFormSet = modelformset_factory(Logbook, form=LogbookFormSet, extra=0)
 
@@ -145,7 +146,7 @@ def logbook_parent_view(request, user_id):
         form = LogbookFilterForm(request.POST or None, parent=parent)
         if form.is_valid():
             student = form.cleaned_data.get('student')
-            logbooks = Logbook.objects.filter(student=student)
+            logbooks = Logbook.objects.filter(student=student).order_by('lesson__start_time')
             context = {
                 'form': form,
                 'student': student,

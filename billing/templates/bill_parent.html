@@ -9,14 +9,15 @@
     {{ form|crispy }}
     <input type="submit" value="Submit" class="btn btn-success">
   </form>
-
+    <br>
   {% if billing %}
-    <table>
+    <table class="table table-striped">
       <thead>
         <tr>
           <th>Payment Type</th>
           <th>Amount</th>
           <th>Date</th>
+          <th>Detail</th>
         </tr>
       </thead>
       <tbody>
@@ -25,7 +26,7 @@
             <td>{{ bill.typ }}</td>
             <td>{{ bill.amount }}</td>
             <td>{{ bill.date }}</td>
-                <td><a href="{% url 'billing:bill-detail' bill.id %}">Detail</a></td>
+            <td><a class="btn btn-info btn-sm" href="{% url 'billing:bill-detail' bill.id %}">View</a></td>
           </tr>
         {% endfor %}
       </tbody>

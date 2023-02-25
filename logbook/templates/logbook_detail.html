@@ -1,25 +1,22 @@
 {% extends 'base.html' %}
+{% load auth_extras %}
 
 {% block content %}
-    <h1>Logbook Detail</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Student</th>
-                <th>Attendance</th>
-                <th>Grade</th>
-                <th>Comment</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{ logbook.student }}</td>
-                <td>{{ logbook.attendance }}</td>
-                <td>{{ logbook.grade }}</td>
-                <td>{{ logbook.comment }}</td>
-            </tr>
-        </tbody>
-    </table>
-    <a href="{% url 'logbook:logbook-update' logbook.id %}">Edit</a>
-    <a href="{% url 'logbook:logbook-delete' logbook.id %}">Delete</a>
+<h1 class="mt-2">Logbook Detail</h1>
+<hr class="mt-0 mb-4">
+
+<div class="card" style="width: 18rem;">
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item"><b>Student:</b> {{ logbook.student }}</li>
+        <li class="list-group-item"><b>Attendance:</b> {{ logbook.attendance }}</li>
+        <li class="list-group-item"><b>Grade:</b> {{ logbook.grade }}</li>
+        <li class="list-group-item"><b>Comment:</b> {{ logbook.comment }}</li>
+    </ul>
+</div>
+<div><br>
+    {% if request.user|has_group:"teacher" %}
+        <a class="btn btn-primary" href="{% url 'logbook:logbook-update' logbook.id %}">Edit</a>
+        <a class="btn btn-danger" href="{% url 'logbook:logbook-delete' logbook.id %}">Delete</a>
+    {% endif %}
+</div>
 {% endblock %}
