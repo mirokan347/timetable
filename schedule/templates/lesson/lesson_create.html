@@ -15,7 +15,7 @@
             {{ form.end_time|as_crispy_field }}
         </div>
     </div>
-    {{ form.students|as_crispy_field }}
+    <div  class="overflow-auto" style="height: 200px; ">{{ form.students|as_crispy_field}}</div>
     {{ form.class_group|as_crispy_field }}
     {{ form.teacher|as_crispy_field }}
     <button type="submit" class="btn btn-success">Save</button>

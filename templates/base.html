@@ -50,7 +50,7 @@
     {% include 'topnav.html' %}
 </head>
 <body>
-    {% if request.user.is_authenticated and request.user|has_group:"teacher" or request.user|has_group:"parent" or request.user|has_group:"student" %}
+    {% if request.user.is_authenticated and request.user|has_group:"teacher" or request.user|has_group:"parent" or request.user|has_group:"student" or request.user.is_superuser %}
     <div class="sidenav">
     {% include 'sidenav.html' %}
     </div>

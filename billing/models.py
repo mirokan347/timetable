@@ -4,7 +4,7 @@ from users.models import Student, Teacher
 
 
 class Billing(models.Model):
-    date = models.DateField(auto_now_add=True)
+    date = models.DateField()
     student = models.ForeignKey(Student, on_delete=models.CASCADE, blank=True, null=True)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, blank=True, null=True)
     description = models.CharField(max_length=255, blank=True, null=True)

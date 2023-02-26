@@ -1,5 +1,5 @@
 {% load auth_extras %}
-{% if request.user|has_group:"teacher" %}
+{% if request.user|has_group:"teacher" or request.user.is_superuser %}
     <a class="nav-link" href="{% url 'admin:index' %}">Administration</a>
     <a class="nav-link" href="{% url 'schedule:lesson-create' %}">Create lesson</a>
     <a class="nav-link" href="{% url 'schedule:timetable' %}">Timetable</a>

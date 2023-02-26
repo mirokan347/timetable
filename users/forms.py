@@ -1,8 +1,8 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django import forms
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, get_user_model
 
-from .models import User
+from .models import User, Teacher, Student, Parent
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -70,3 +70,33 @@ class AccountUpdateForm(forms.ModelForm):
         if commit:
             account.save()
         return account
+
+
+class TeacherForm(forms.ModelForm):
+    class Meta:
+        model = Teacher
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['user'].queryset = get_user_model().objects.filter(groups__isnull=True)
+
+
+class StudentForm(forms.ModelForm):
+    class Meta:
+        model = Student
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['user'].queryset = get_user_model().objects.filter(groups__isnull=True)
+
+
+class ParentForm(forms.ModelForm):
+    class Meta:
+        model = Parent
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['user'].queryset = get_user_model().objects.filter(groups__isnull=True)

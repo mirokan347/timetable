@@ -45,7 +45,16 @@ class LessonCreateView(UserPassesTestMixin, CreateView):
         return response
 
     def test_func(self):
-        return self.request.user.has_perm('schedule.create_lesson')
+        user = self.request.user
+        if user.is_authenticated and user.groups.filter(name='teacher').exists():
+            # Allow teachers who are also is_staff users to create lessons
+            if user.is_staff:
+                return True
+            else:
+                # Deny permission for non-is_staff teachers
+                return False
+        else:
+            return self.request.user.has_perm('schedule.create_lesson')
 
     def handle_no_permission(self):
         return redirect('/no_permission/')

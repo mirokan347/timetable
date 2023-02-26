@@ -8,12 +8,8 @@ class LogBookAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = super(LogBookAdmin, self).get_queryset(request)
-        if request.user.is_superuser:
+        if request.user.is_superuser or request.user.is_staff:
             return qs
-        elif request.user.is_staff:
-            return qs.filter(student__class_group=request.user.profile.class_group)
-        elif request.user.is_authenticated:
-            return qs.filter(student=request.user.profile.student)
 
 
 admin.site.register(Logbook, LogBookAdmin)

@@ -14,6 +14,10 @@
 		<h5>{{last_name}}</h5>
 		<!-- If Auth user is viewing their own profile -->
 		{% if is_self %}
+		<p class="mt-4 mb-1 field-heading">Phone number</p>
+		<h5>{{phone}}</h5>
+        <p class="mt-4 mb-1 field-heading">Address</p>
+		<h5>{{address}}</h5>
 		<a  class="mt-4 btn btn-primary" href="{% url 'users:edit' user_id=id %}">Update</a>
 		<div class="d-flex flex-column mt-4">
 			<a class="m-auto" href="{% url 'password_change' %}">Change password</a>
