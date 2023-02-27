@@ -13,6 +13,7 @@
                     <th>Grade</th>
                 {% else %}
                     <th>Subject</th>
+                    <th>Date</th>
                     <th>Attendance</th>
                     <th>Grade</th>
                     <th>Detail</th>
@@ -31,6 +32,7 @@
                         <td><a class="btn btn-danger btn-sm" href="{% url 'logbook:logbook-delete' logbook.id %}">Delete</a></td>
                     {% else %}
                         <td>{{ logbook.subject }}</td>
+                        <td>{{ logbook.lesson.start_time }}</td>
                         <td>{{ logbook.attendance }}</td>
                         <td>{{ logbook.grade }}</td>
                         <td><a class="btn btn-info btn-sm" href="{% url 'logbook:logbook-detail' logbook.id %}">View</a></td>
