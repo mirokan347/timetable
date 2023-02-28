@@ -1,7 +1,5 @@
 from django import forms
 
-from .models import Student
-
 
 class BillFilterForm(forms.Form):
     student = forms.ModelChoiceField(queryset=None)

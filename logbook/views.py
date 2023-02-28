@@ -68,11 +68,9 @@ class LogbookCreateView(UserPassesTestMixin, CreateView):
     def test_func(self):
         user = self.request.user
         if user.is_authenticated and user.groups.filter(name='teacher').exists():
-            # Allow teachers who are also is_staff users to create lessons
             if user.is_staff:
                 return True
             else:
-                # Deny permission for non-is_staff teachers
                 return False
         else:
             return self.request.user.has_perm('logbook.create_logbook')

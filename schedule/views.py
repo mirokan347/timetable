@@ -1,11 +1,8 @@
-from collections import defaultdict
-
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.urls import reverse, reverse_lazy
 from datetime import datetime, timedelta
-import calendar
 from django.views.generic import (
     CreateView,
     DetailView,
@@ -16,7 +13,7 @@ from django.views.generic import (
 
 from logbook.models import Logbook
 from .forms import LessonModelForm, TimetableFilterForm, TimetableTeacherFilterForm
-from .models import Lesson, ClassGroup, Location, Subject
+from .models import Lesson
 
 
 class LessonCreateView(UserPassesTestMixin, CreateView):
@@ -47,11 +44,9 @@ class LessonCreateView(UserPassesTestMixin, CreateView):
     def test_func(self):
         user = self.request.user
         if user.is_authenticated and user.groups.filter(name='teacher').exists():
-            # Allow teachers who are also is_staff users to create lessons
             if user.is_staff:
                 return True
             else:
-                # Deny permission for non-is_staff teachers
                 return False
         else:
             return self.request.user.has_perm('schedule.create_lesson')
@@ -172,7 +167,6 @@ def timetable_view(request):
             date_string = date.strftime('%Y-%m-%d')
             datetime_object = datetime.strptime(date_string, '%Y-%m-%d')
             week = datetime_object.isocalendar()[1]
-            # Get lessons for the selected week and class group
             if class_group:
                 lessons = Lesson.objects.filter(class_group=class_group, start_time__week=week).order_by(
                     'start_time__hour', 'start_time__minute')

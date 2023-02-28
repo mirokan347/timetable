@@ -79,10 +79,6 @@ def get_redirect_if_exists(request):
 
 
 def account_view(request, *args, **kwargs):
-    """
-    - Logic here is kind of tricky
-        is_self (boolean)
-    """
     context = {}
     user_id = kwargs.get("user_id")
     try:
@@ -97,7 +93,6 @@ def account_view(request, *args, **kwargs):
         context['phone'] = account.phone
         context['address'] = account.address
 
-        # Define template variables
         is_self = True
         user = request.user
         if user.is_authenticated and user != account:
@@ -105,7 +100,6 @@ def account_view(request, *args, **kwargs):
         elif not user.is_authenticated:
             is_self = False
 
-        # Set the template variables to the values
         context['is_self'] = is_self
         context['BASE_URL'] = settings.BASE_URL
         return render(request, "users/account.html", context)

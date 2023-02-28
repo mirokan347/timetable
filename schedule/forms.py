@@ -44,7 +44,7 @@ class LessonModelForm(forms.ModelForm):
         ]
 
         widgets = {
-            # Use localization and bootstrap 3
+            # Use localization and bootstrap 4
             'start_time': DateTimeWidget(attrs={'id': "start_time_id"}, usel10n=True, bootstrap_version=4),
             'end_time': DateTimeWidget(attrs={'id': "end_time_id"}, usel10n=True, bootstrap_version=4),
         }
